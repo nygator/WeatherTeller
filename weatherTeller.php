@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
 <head>
-	<title>Kivasti kokeillaan</title>
+	<title>The Magical Weather Machine!</title>
 	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
 
 </head>
@@ -12,26 +12,34 @@
 <?php 
 
 
-function getUserLocation() {
+function tellWeather() {
 	include 'keyInformation.php';
 		
+	#Gets users location information from ip-api.io	as JSON
 	$data = json_decode(file_get_contents('https://ip-api.io/api/json?api_key=' . $apiKey));
-	
-
 	$userCity = $data->city;
+	
+	#Extra checks if the person is using a proxy
+	$suspect = $data->suspiciousFactors->isSpam;
+	if ($suspect == true) {
+		echo 'Open Weather Map thinks you are a spammer'; }
+	$suspect = $data->suspiciousFactors->isProxy;
+	if ($suspect == true) {
+		echo 'Open Weather Map thinks you are using a proxy'; }
+	$suspect = $data->suspiciousFactors->isTorNode;
+	if ($suspect == true) { 
+		echo 'Open Weather Map thinks you are using TOR'; }
+	
+	echo 'You are located in: ' . $userCity . '<br/>'; 
+	
+	#Gets locations weather information from openweathermap.org as JSON
+	$CurrentWeather = json_decode(file_get_contents('https://api.openweathermap.org/data/2.5/weather?q=' . $userCity . '&appid=' . $apiKeyOWM . '&units=metric'));
 
-	  
-echo 'You are located in: ' . $userCity; 
-echo "<br/>"; 
-
-$CurrentWeather = json_decode(file_get_contents('https://api.openweathermap.org/data/2.5/weather?q=' . $userCity . '&appid=' . $apiKeyOWM . '&units=metric'));
-
-echo 'The current temperature of ' . $userCity . ' is ' . $CurrentWeather->main->temp . 'C';
+	echo 'The current temperature of ' . $userCity . ' is ' . $CurrentWeather->main->temp . 'C';
 
 }
 
-
-getUserLocation();
+tellWeather();
 ?>	
 </body>
 

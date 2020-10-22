@@ -33,10 +33,9 @@ function tellWeather() {
 	echo 'You are located in: ' . $userCity . '<br/>'; 
 	
 	#Gets locations weather information from openweathermap.org as JSON
-	$CurrentWeather = json_decode(file_get_contents('https://api.openweathermap.org/data/2.5/weather?q=' . $userCity . '&appid=' . $apiKeyOWM . '&units=metric'));
-
-	echo 'The current temperature of ' . $userCity . ' is ' . $CurrentWeather->main->temp . 'C';
-
+	$currentWeather = json_decode(file_get_contents('https://api.openweathermap.org/data/2.5/weather?q=' . $userCity . '&appid=' . $apiKeyOWM . '&units=metric'));
+	
+	echo 'The current temperature of ' . $userCity . ' is ' . $currentWeather->main->temp . 'C but it feels like ' . $currentWeather->main->feels_like . 'C.';
 }
 
 tellWeather();

@@ -14,21 +14,25 @@
 
 function tellWeather() {
 	include 'keyInformation.php';
+	
+	
+	$ip = $_SERVER['HTTP_CLIENT_IP'] ? $_SERVER['HTTP_CLIENT_IP'] : ($_SERVER['HTTP_X_FORWARDED_FOR'] ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR']);
+
 		
 	#Gets users location information from ip-api.io	as JSON
-	$data = json_decode(file_get_contents('https://ip-api.io/api/json?api_key=' . $apiKey));
+	$data = json_decode(file_get_contents('https://ip-api.io/json/' . $ip . '?api_key=' . $apiKey));
 	$userCity = $data->city;
 	
 	#Extra checks if the person is using a proxy
 	$suspect = $data->suspiciousFactors->isSpam;
 	if ($suspect == true) {
-		echo 'Open Weather Map thinks you are a spammer'; }
+		echo 'https://ip-api.io/ thinks you are a spammer'; }
 	$suspect = $data->suspiciousFactors->isProxy;
 	if ($suspect == true) {
-		echo 'Open Weather Map thinks you are using a proxy'; }
+		echo 'https://ip-api.io/ thinks you are using a proxy'; }
 	$suspect = $data->suspiciousFactors->isTorNode;
 	if ($suspect == true) { 
-		echo 'Open Weather Map thinks you are using TOR'; }
+		echo 'https://ip-api.io/ thinks you are using TOR'; }
 	
 	echo 'You are located in: ' . $userCity . '<br/>'; 
 	

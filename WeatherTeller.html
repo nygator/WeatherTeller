@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="keyInformation.js"></script>
+<title>Magical Weather Machine!</title>
+</head>
+<body>
+
+<p id="demo"></p>
+
+
+<script>
+
+
+
+
+	function gettingJSON(){
+	var location;
+	var userIP;
+	var flagURL;
+	var emojiFlag;
+	
+	$.ajax({
+		type: 'GET',
+		url: 'https://ip-api.io/json?api_key=' + apiKey,
+		data: { get_param: 'value' },
+		datatype: 'json',
+		success: function (data) {
+	
+			console.log(JSON.stringify(data.flagUrl, null, 0));
+			var img1 = document.getElementById("testImage");
+			img1 = JSON.stringify(data.flagUrl, null, 0);
+			
+			console.log(JSON.stringify(data.ip, null, 2));
+					}
+				});
+				
+
+
+	
+
+</script>
+
+<button id = "getIt" onclick = "gettingJSON()">Get JSON</button>
+<img id = "testImage">
+</body>
+</html>

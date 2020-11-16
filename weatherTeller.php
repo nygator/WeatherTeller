@@ -18,10 +18,18 @@ function tellWeather() {
 	
 	$ip = $_SERVER['HTTP_CLIENT_IP'] ? $_SERVER['HTTP_CLIENT_IP'] : ($_SERVER['HTTP_X_FORWARDED_FOR'] ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR']);
 
-		
+	
 	#Gets users location information from ip-api.io	as JSON
 	$data = json_decode(file_get_contents('https://ip-api.io/json/' . $ip . '?api_key=' . $apiKey));
+	$userFlag = $data->flagUrl;
+	
+	if ($data->city == null) {
+		$userCity = 'Helsinki';
+	}
+	
+	else{ 
 	$userCity = $data->city;
+	}
 	
 	#Extra checks if the person is using a proxy
 	$suspect = $data->suspiciousFactors->isSpam;
@@ -34,7 +42,11 @@ function tellWeather() {
 	if ($suspect == true) { 
 		echo 'https://ip-api.io/ thinks you are using TOR'; }
 	
-	echo 'You are located in: ' . $userCity . '<br/>'; 
+	echo 'You are located in: ' . $userCity . '<img src ="' . $userFlag . '"width="100" height="100"><br/>'; 
+	
+	echo '<script> console.log("' . $userCity . '"); </script>';
+	
+
 	
 	#Gets locations weather information from openweathermap.org as JSON
 	$currentWeather = json_decode(file_get_contents('https://api.openweathermap.org/data/2.5/weather?q=' . $userCity . '&appid=' . $apiKeyOWM . '&units=metric'));
